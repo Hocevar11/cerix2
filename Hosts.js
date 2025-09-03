@@ -3,10 +3,10 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, View, Image, TouchableOpacity, Alert, useColorScheme} from 'react-native';
 import { Button, FAB, List, Modal, PaperProvider, Portal, TextInput } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import {NavigationContainer, useRoute, useFocusEffect} from '@react-navigation/native';
 import { Text } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+
 
 
 export const Hosts = ({navigation}) => {
@@ -19,8 +19,6 @@ export const Hosts = ({navigation}) => {
     const colorScheme = useColorScheme();
 
     const backgroundColor = colorScheme === 'dark' ? 'black' : 'white'
-
-
 
     useEffect(() => {
         AsyncStorage.getItem('host').then(res => {
@@ -38,6 +36,7 @@ export const Hosts = ({navigation}) => {
                 const savedHosts = await AsyncStorage.getItem('hosts');
                 if(savedHosts){
                     setHost(JSON.parse(savedHosts));
+                    console.log(savedHosts);
 
                 }
             } catch (error) {
@@ -178,6 +177,19 @@ export const Hosts = ({navigation}) => {
         
     }
 
+    const probar = () => {
+        const url = `${editedHost.protocolo}${editedHost.host}/${editedHost.ruta}/sincro/movil/probar`;
+        axios.post(url)
+        .then(res => {
+            if(res.data.success){
+                Alert.alert('Exito',res.data.mensaje);
+            }
+        })
+        .catch(e => {
+            alert(e);
+        })
+    }
+
     return(
         <View style = {{flex: 1, backgroundColor: '#FFF'}}>
             <View style = {{alignItems:'center'}}>
@@ -235,8 +247,12 @@ export const Hosts = ({navigation}) => {
                                 <Picker.Item label='HTTPS' value='https://' />
                             </Picker>
                         </View> 
+
                         <Button mode='contained' onPress={saveHost}>
                             Guardar
+                        </Button>
+                        <Button mode='contained' style= {{marginTop:10, backgroundColor:'green'}} onPress={probar}>
+                            Probar
                         </Button>
                     </View>
                 </Modal>
