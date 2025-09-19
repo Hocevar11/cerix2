@@ -33,7 +33,7 @@ class C_movil extends Controller {
         (SELECT COUNT(*) FROM sfac WHERE cod_cli = a.cliente AND tipo_doc = "D" AND fecha >= DATE_SUB(NOW(), INTERVAL 1 MONTH)) devo,
         (SELECT  COALESCE(ROUND(SUM(abonos-monto),2),0) FROM smov a WHERE a.cod_cli = a.cliente AND a.tipo_doc IN ("ND","FC") AND a.abonos < a.monto) vencido
         FROM scli a 
-        WHERE tipo = 1 ';
+        WHERE tipo <> 0 ';
 
         $query = $this->db->query($mSQL);
         $clientes = $query->result_array();
