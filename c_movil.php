@@ -38,7 +38,7 @@ class C_movil extends Controller {
         $query = $this->db->query($mSQL);
         $clientes = $query->result_array();
 
-        $this->output->set_output(json_encode($clientes, JSON_INVALID_UTF8_SUBSTITUTE));
+        $this->output->set_output(json_encode($clientes, JSON_UNESCAPED_UNICODE));
 
     }
 
